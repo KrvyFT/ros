@@ -1,0 +1,5 @@
+{
+    "rust.target": "ros.json",
+    "rust.all_targets": false,
+    "rust-analyzer.checkOnSave.allTargets": false
+}
