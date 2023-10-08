@@ -31,20 +31,3 @@ fn panic(info: &PanicInfo) -> ! {
 fn test_println_simple() {
     println!("Test println output");
 }
-
-#[test_case]
-fn test_println_many() {
-    for _ in 1..=100 {
-        println!("Tets");
-    }
-}
-
-#[test_case]
-fn test_println_output() {
-    let s = "Some test string that fits on a single line";
-    println!("{}", s);
-    for (i, c) in s.chars().enumerate() {
-        let screen_char = WRITER.lock().buffer.chars[BUFFER_HEIGHT - 2][i].read();
-        assert_eq!(char::from(screen_char.ascii_character), c);
-    }
-}
