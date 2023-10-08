@@ -35,10 +35,10 @@ fn panic(info: &PanicInfo) -> ! {
 }
 
 #[cfg(test)]
-fn test_runner(tests: &[&dyn Fn()]) {
+fn test_runner(tests: &[&dyn TestTable]) {
     println!("Runner {} test", tests.len());
     for test in tests {
-        test();
+        test.run();
     }
 
     exit_qemu(QemuExitCode::Success);
@@ -60,10 +60,19 @@ pub fn exit_qemu(exitcode: QemuExitCode) {
     }
 }
 
+pub trait TestTable {
+    fn run(&self) -> ();
+}
+
+impl<T: Fn()> TestTable for T {
+    fn run(&self) -> () {
+        serial_print!("{}...\t", core::any::type_name::<T>());
+        self();
+        serial_println!("[OK]");
+    }
+}
+
 #[test_case]
 fn trivial_assertion() {
-    serial_print!("trivial assertion...");
-    assert_eq!(0, 0);
-    loop {}
-    serial_println!("[OK]");
+    assert_eq!(1, 1);
 }
